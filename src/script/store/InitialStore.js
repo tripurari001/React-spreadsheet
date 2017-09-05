@@ -2,7 +2,7 @@
 // and create a array of object to represent
 // state of spreadshee
 const numberOfColumn = 10;
-const numberOfRow = 10;
+const numberOfRow = 20;
 
 
 export const lastColumn = String.fromCharCode(97 + (numberOfColumn - 1));

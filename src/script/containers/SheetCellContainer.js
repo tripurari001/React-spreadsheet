@@ -8,6 +8,11 @@ import { isCharacterKeyPress } from '../util/util';
 
 const keyDownHandler = (e, dispatch, columnId, rowNo, isEditable) => {
   switch (e.keyCode) {
+    case 27: // esc key exit edit mode
+      if (isEditable) {
+        dispatch(setActiveCell((columnId + rowNo), false));
+      }
+      break;
     case 37: // left arrow
       if (columnId !== 'a') {
         const newActiveCell = String.fromCharCode(columnId.charCodeAt(0) - 1) + rowNo;

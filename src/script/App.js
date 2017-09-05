@@ -8,7 +8,9 @@ class App extends React.Component {
     return (
       <div>
         <HeaderContainer />
-        <SheetContainer />
+        <div className="sheet-wrap">
+          <SheetContainer />
+        </div>
       </div>
     );
   }
