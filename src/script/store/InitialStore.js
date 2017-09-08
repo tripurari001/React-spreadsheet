@@ -1,8 +1,8 @@
 // define no of column and row
 // and create a array of object to represent
 // state of spreadshee
-const numberOfColumn = 10;
-const numberOfRow = 20;
+const numberOfColumn = 8;
+const numberOfRow = 15;
 
 
 export const lastColumn = String.fromCharCode(97 + (numberOfColumn - 1));
@@ -39,10 +39,18 @@ function createSheet(noOfColumn, noOfRow) {
 const initialStore = {
   fileName: 'Untitled Spradesheet',
   activeCell: {
-    currentActiveCell: 'a0',
+    currentActiveCell: 'a1',
     isEditable: false,
+    byDubleClick: false,
   },
   sheet: createSheet(numberOfColumn, numberOfRow),
+  hybridCells: {
+    cells: {},
+    lastAction: {
+      actionType: '',
+      cellId: '',
+    },
+  },
 };
 
 

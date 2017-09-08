@@ -17,15 +17,23 @@ class SheetCell extends React.Component {
 
   componentDidUpdate(preProp) {
     const wasEditable = preProp.isEditable;
-    const { isEditable } = this.props;
+    const { isEditable, isHybridCell, columnId, rowNo } = this.props;
 
     if (this.props.isActive && !this.props.isEditable) {
       this.focusDiv();
     }
     if (isEditable && !wasEditable) {
       this.focusInput();
+      if (isHybridCell && (preProp.text !== this.props.text)) {
+        this.props.onChangeHandler(preProp.text, columnId, rowNo);
+      }
     }
     if (wasEditable && !isEditable) {
+      this.props.inputExitHandler(
+        preProp.columnId,
+        preProp.rowNo,
+        preProp.text,
+        preProp.isHybridCell);
     }
   }
 
@@ -41,6 +49,7 @@ class SheetCell extends React.Component {
     const {
       isActive,
       isEditable,
+      byDubleClick,
       rowNo,
       columnId,
       text,
@@ -60,7 +69,7 @@ class SheetCell extends React.Component {
           onDoubleClickHandler(e, columnId, rowNo, isEditable);
         }}
         onKeyDown={(e) => {
-          onKeyDownHandler(e, columnId, rowNo, isEditable);
+          onKeyDownHandler(e, columnId, rowNo, isEditable, byDubleClick);
         }}
         className={classNameValue}
       >
@@ -76,7 +85,7 @@ class SheetCell extends React.Component {
               className="sheet__cell__input"
               value={text}
               onChange={(e) => {
-                onChangeHandler(e, columnId, rowNo);
+                onChangeHandler(e.target.value, columnId, rowNo);
               }}
               ref={(input) => {
                 this.input = input;
@@ -93,14 +102,17 @@ class SheetCell extends React.Component {
 
 SheetCell.propTypes = {
   isActive: PropTypes.bool.isRequired,
+  byDubleClick: PropTypes.bool.isRequired,
   isEditable: PropTypes.bool.isRequired,
+  isHybridCell: PropTypes.bool.isRequired,
   rowNo: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   columnId: PropTypes.string.isRequired,
-  text: PropTypes.string.isRequired,
+  text: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   onSingleClickHandler: PropTypes.func.isRequired,
   onDoubleClickHandler: PropTypes.func.isRequired,
   onKeyDownHandler: PropTypes.func.isRequired,
   onChangeHandler: PropTypes.func.isRequired,
+  inputExitHandler: PropTypes.func.isRequired,
 };
 
 export default SheetCell;

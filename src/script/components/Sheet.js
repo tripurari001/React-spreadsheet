@@ -5,6 +5,10 @@ import SheetCellContainer from '../containers/SheetCellContainer';
 class Sheet extends React.Component {
 
   generateColumn(rowNo) {
+    // don't generate row no '0'
+    // for good UX start counting from 1 not zero
+    // example "=a0 + b0" dose not feel netural
+    if (rowNo === 0) return;
     const column = [];
     const keys = Object.keys(this.props.sheet[rowNo]);
     keys.forEach((key) => {

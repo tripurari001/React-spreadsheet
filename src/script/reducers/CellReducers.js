@@ -11,6 +11,7 @@ export function ActiveCellReducer(state = initialActiveCell, action) {
         ...state,
         currentActiveCell: action.currentActiveCell,
         isEditable: action.isEditable,
+        byDubleClick: action.isEditable && action.byDubleClick,
       };
     default:
       return state;

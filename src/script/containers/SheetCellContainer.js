@@ -3,17 +3,24 @@ import { connect } from 'react-redux';
 
 import SheetCell from '../components/SheetCell';
 import { setActiveCell, setCellValue } from '../actions/CellActions';
-import { keyDownHandler } from '../util/util';
+import { keyDownHandler, inputExitHandler } from '../util/util';
 
 
 const mapStateToProps = (state, ownProps) => {
   const isActive = state.activeCell.currentActiveCell === ownProps.columnId + ownProps.rowNo;
+  const isHybridCell = !!(state.hybridCells.cells[ownProps.columnId + ownProps.rowNo]);
+  const isEditable = isActive && state.activeCell.isEditable;
   return {
     rowNo: ownProps.rowNo,
     columnId: ownProps.columnId,
     isActive,
-    isEditable: isActive && state.activeCell.isEditable,
-    text: state.sheet[ownProps.rowNo][ownProps.columnId],
+    byDubleClick: state.activeCell.byDubleClick,
+    isEditable,
+    text: (isHybridCell && isActive && !isEditable) ?
+      state.hybridCells.cells[ownProps.columnId + ownProps.rowNo].formula
+      : state.sheet[ownProps.rowNo][ownProps.columnId],
+    formula: isHybridCell && state.hybridCells.cells[ownProps.columnId + ownProps.rowNo].formula,
+    isHybridCell,
   };
 };
 
@@ -21,18 +28,21 @@ const mapDispatchToProps = dispatch => ({
   onSingleClickHandler: (e, columnId, rowNo, isActive) => {
     if (isActive) return;
     const currentActiveCell = columnId + rowNo;
-    dispatch(setActiveCell(currentActiveCell, false));
+    dispatch(setActiveCell(currentActiveCell, false, false));
   },
   onDoubleClickHandler: (e, columnId, rowNo, isEditable) => {
     if (isEditable) return;
     const currentActiveCell = columnId + rowNo;
-    dispatch(setActiveCell(currentActiveCell, true));
+    dispatch(setActiveCell(currentActiveCell, true, true));
   },
-  onKeyDownHandler: (e, columnId, rowNo, isEditable) => {
-    keyDownHandler(e, dispatch, columnId, rowNo, isEditable);
+  onKeyDownHandler: (e, columnId, rowNo, isEditable, byDubbleClick) => {
+    keyDownHandler(e, dispatch, columnId, rowNo, isEditable, byDubbleClick);
   },
-  onChangeHandler: (e, columnId, rowNo) => {
-    dispatch(setCellValue(columnId, rowNo, e.target.value));
+  onChangeHandler: (value, columnId, rowNo) => {
+    dispatch(setCellValue(columnId, rowNo, value));
+  },
+  inputExitHandler: (columnId, rowNo, text, isHybridCell) => {
+    inputExitHandler(dispatch, columnId, rowNo, text, isHybridCell);
   },
 });
 
