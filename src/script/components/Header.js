@@ -66,9 +66,6 @@ function Header(props) {
             </ul>
           </li>
           <li>
-            <a className="pointer">Tips and Help</a>
-          </li>
-          <li>
             <a className="pointer" onClick={() => { downloadAsCsv(); }}>Download as Csv</a>
           </li>
         </ul>
