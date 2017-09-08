@@ -4469,10 +4469,24 @@ button.close {
     display: none !important; } }
 
 body {
-  padding-top: 55px; }
+  padding-top: 52px; }
+
+.pointer {
+  cursor: pointer; }
+
+.dropdown:hover .dropdown-menu {
+  display: block; }
+
+.cordinate {
+  font-weight: 700;
+  background-color: #dedede;
+  border-color: #aeaeae !important; }
 
 .sheet__table {
   border-collapse: separate; }
+
+.sheet__table tr:nth-child(2n+1) {
+  background-color: #f7f7f7; }
 
 .sheet__sub-cell {
   white-space: nowrap;

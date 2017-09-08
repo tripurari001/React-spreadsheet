@@ -2,6 +2,7 @@ import { setActiveCell, setCellValue } from '../actions/CellActions';
 import { lastColumn, lastRow } from '../store/InitialStore';
 import { addHybridCell, removeHybridCell } from '../actions/HybridCellActions';
 
+// to check if key pressed will produce a charecter
 export function isCharacterKeyPress(evt) {
   if (typeof evt.which === 'undefined') {
     // This is IE, which only fires keypress events for printable keys
@@ -47,7 +48,7 @@ export const keyDownHandler = (e, dispatch, columnId, rowNo, isEditable, byDuble
         dispatch(setActiveCell(newActiveCell, false));
       }
       break;
-    default: // if not in input mode reset cell value and enter input mode
+    default: // if not in input mode then reset cell value and enter input mode
       if (isCharacterKeyPress(e) && !isEditable) {
         dispatch(setActiveCell((columnId + rowNo), true, false));
         dispatch(setCellValue(columnId, rowNo, ''));

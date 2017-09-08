@@ -1,5 +1,5 @@
-import ReduxWatcher from 'redux-watcher';
 import store from '../store/ConfigStore';
+import ReduxWatcher from './redux-watcher';
 import { getRowNo, getColumnId } from './util';
 import { setCellValue } from '../actions/CellActions';
 import mathFunction from './mathFunction';
@@ -47,6 +47,7 @@ const addWatcher = (toWatch, funcType, hybridCellId) => {
   callbackFunc({ currentState: store.getState() });
 };
 
+// to remove watch on unused cells
 const removeWatcher = (hybridCellId) => {
   if (removeWatcherData[hybridCellId]) {
     removeWatcherData[hybridCellId].forEach((e) => {
@@ -63,7 +64,7 @@ const initWatcher = () => {
   const hybridCellIds = Object.keys(hybridCells);
   if (hybridCellIds.length > 0) {
     hybridCellIds.forEach((hybridCellId) => {
-      const toWatch = hybridCells[hybridCellId].toWatch;
+      const toWatch = hybridCells[hybridCellId].cellToWatch;
       const funcType = hybridCells[hybridCellId].callbackFunc;
       addWatcher(toWatch, funcType, hybridCellId);
     });
@@ -72,6 +73,7 @@ const initWatcher = () => {
   watchHybriCellChange();
 };
 
+// whenever new hybridcell added or removed run respective function
 const watchHybriCellChange = () => {
   watcher.watch(['hybridCells', 'cells'], ({ currentState }) => {
     const cellId = currentState.hybridCells.lastAction.cellId;
@@ -85,6 +87,54 @@ const watchHybriCellChange = () => {
       removeWatcher(cellId);
     }
   });
+};
+
+// test for localstorage
+export function lsTest() {
+  const test = 'test';
+  try {
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// auto save to local storage on every 10 sec
+export const autoSave = () => {
+  if (!lsTest()) return;
+  const timerId = setInterval(() => {
+    const data = JSON.stringify(store.getState());
+    localStorage.setItem('state', data);
+  }, 10000);
+  return timerId;
+};
+
+export const convertToCsv = (sheet) => {
+  const csvData = [];
+  sheet.forEach((columnObj) => {
+    const keys = Object.keys(columnObj);
+    let rowText = '';
+    keys.forEach((key) => {
+      if (columnObj[key]) {
+        rowText += `${columnObj[key]},`;
+      }
+    });
+    csvData.push(rowText);
+  });
+  return csvData.join('\n');
+};
+
+export const downloadAsCsv = () => {
+  const state = store.getState();
+  const a = document.createElement('a');
+  a.href = `data:attachment/csv,${encodeURI(convertToCsv(state.sheet))}`;
+  a.target = '_blank';
+  a.download = `${state.fileName}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 };
 
 export default initWatcher;

@@ -1,41 +1,13 @@
-$body-padding-top : 55px;
+$body-padding-top : 52px; // 50 is height of fixed top nav
 
 body {
   padding-top: $body-padding-top;
 }
 
-.sheet-wrap {
+.pointer {
+  cursor: pointer;
 }
 
-.sheet__table {
-  border-collapse: separate;
-}
-
-.sheet__sub-cell {
-  white-space: nowrap;
-  position: relative;
-  width: 100%;
-  min-height: 1.30em;
-  outline: 0 solid;
-}
-
-.sheet__cell {
-  padding: 5px !important;
-  min-width: 160px;
-}
-
-.sheet__cell__input {
+.dropdown:hover .dropdown-menu {
   display: block;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  padding: 0;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-.sheet__cell--active {
-  padding: 4px !important;
-  border: 2px solid #4285F4 !important;
 }
