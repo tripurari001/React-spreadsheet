@@ -1,9 +1,7 @@
-# React Seprate Sheet
+# React Separate Sheet ( Outdated project )
+## This is not maintained anymore was build only for learning purpose
 
-this repository contain the scource code of [https://tripurari001.github.io/](https://tripurari001.github.io/)
-
-
-on the Website
+On the Website
 
 1. User can navigate using arrow key
 2. user can insert some math formula using '=' at beginning  and operators +, -, *, / ( supported for two cell)
